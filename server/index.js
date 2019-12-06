@@ -16,13 +16,6 @@ mongoose.connect(keys.MONGODB_URI, () => {
   console.log("connected to mongo db");
 });
 
-app.use(
-  cookieSession({
-    name: "session",
-    keys: [keys.COOKIE_KEY],
-    maxAge: 24 * 60 * 60 * 100
-  })
-);
 
 // parse cookies
 app.use(cookieParser());
