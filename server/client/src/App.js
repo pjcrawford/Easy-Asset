@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { Route, Switch } from "react-router-dom";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "./App.css";
-
+import React, { Component } from 'react';
+import axios from 'axios';
+import Chart from './components/Chart';
+import './App.css';
 
 
 class App extends Component {
+  
   render() {
     return (
       <div className="App">
@@ -14,9 +14,24 @@ class App extends Component {
           </h1>
         </header>
         <div className="App-main-body">
+        <Chart/>
         </div>
       </div>
     );
   }
+  // getStocks() {
+  //   axios.get('https://www.highcharts.com/samples/data/GOOG-c.json?origin=*', {
+
+  //   })
+  //   .then((data) => {
+  //     const series = {
+  //         name: 'GOOG',
+  //         data: data
+  //     };
+  //     this.setState({ series: series });
+  //   })
+  // }
+
+
 }
 export default App;
