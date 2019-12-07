@@ -1,22 +1,21 @@
-import React from 'react'
-import Highcharts from 'highcharts'
-import HighchartsReact from 'highcharts-react-official'
+import React, { Component } from 'react';
+import Chart from './Chart';
+import './../assets/css/App.css';
 
-const HighchartsWrapper = (props) => {
-   console.log(props.chartData); 
+export default class HighchartsWrapper extends Component {
+  componentDidMount(){
+    this.chart();
+  }
 
-    let options = {
-        title: { text: 'My chart' },
-        series: props.chartData
-    }
-
+  render() {
     return(
-            <HighchartsReact
-                highcharts={Highcharts}
-                options={options}
-                oneToOne={true}
-            />
-    );
-}
+      <div id={this.props.id} className="chart-container">
+      </div>
+    )
+  }
 
-export default HighchartsWrapper;
+  chart() {
+    const chart = new Chart(this.props.id, this.props.series, {});
+    this.props.getChart(chart)
+  }
+}
