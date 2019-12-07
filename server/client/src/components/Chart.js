@@ -1,38 +1,62 @@
-import React from 'react'
-import { render } from 'react-dom'
-import HighchartsWrapper from './HighchartsWrapper'
+  
+import Highcharts from 'highcharts/highstock';
 
-class Chart extends React.Component {
-  state = {
-    series: [{
-      data: [1,2,3]
-    }]
+export default class Chart {
+  constructor(divClass, series, config) {
+    
+    this.divClass = divClass;
+    this.series = series;
+    this.config = config;
+    this.chart = null;
+    this.create()
   }
 
-  onClick = () => {
-    this.setState({
-      series: [{
-        data: [1,2,3]
+  create() {
+    const theConfig = {
+
+      rangeSelector: {
+        selected: 4
       },
-      {
-        data: [2,3,1]
+
+      yAxis: {
+        labels: {
+          formatter: function () {
+              return (this.value > 0 ? ' + ' : '') + this.value + '%';
+          }
+        },
+        plotLines: [{
+          value: 0,
+          width: 2,
+          color: 'silver'
+        }]
       },
-      {
-        data: [3,2,1]
-      }]
-    })
+
+      plotOptions: {
+        series: {
+          compare: 'percent',
+          showInNavigator: true
+        }
+      },
+
+      tooltip: {
+        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
+        valueDecimals: 2,
+        split: true
+      },
+
+      series: this.series
+    }
+
+    this.chart = Highcharts.stockChart(this.divClass, theConfig)
   }
 
-  render () {
-    return (
-      <div>
-      <HighchartsWrapper
-        chartData={this.state.series}
-      />
-      <button onClick={this.onClick}>update</button>
-      </div>
-    )
+  add(serie) {
+    this.chart.addSeries(serie);
+  }
+
+  update(series) {
+    this.series = series;
+    this.chart.destroy();
+    this.create();
   }
 }
-
-export default Chart;

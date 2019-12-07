@@ -1,9 +1,28 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const StockSchema = new Schema({
-  id: String,
-  name: String,
-});
+class Stock {
+  constructor() {
+    this.model = mongoose.model('stock', new Schema({
+      name: String
+    }));
+  }
 
-module.exports = mongoose.model("stock", StockSchema);
+  async add(stockName) {
+    const stock = await this.model.findOne({ name: stockName });
+    if (!stock) {
+      return this.create(stockName);
+    }
+    return stock;
+  }
+
+  create(stockName) {
+    return this.model.create({ name: stockName })
+  }
+
+  delete(stockName) {
+    return this.model.findOneAndDelete({ name: stockName })
+  }
+}
+
+module.exports = new Stock();

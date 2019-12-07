@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Chart from './components/Chart';
+import HighchartsWrapper from './components/HighchartsWrapper';
 import './App.css';
 
 
@@ -19,18 +20,6 @@ class App extends Component {
       </div>
     );
   }
-  // getStocks() {
-  //   axios.get('https://www.highcharts.com/samples/data/GOOG-c.json?origin=*', {
-
-  //   })
-  //   .then((data) => {
-  //     const series = {
-  //         name: 'GOOG',
-  //         data: data
-  //     };
-  //     this.setState({ series: series });
-  //   })
-  // }
 
 
 }
