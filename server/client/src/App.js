@@ -25,6 +25,7 @@ class App extends Component {
   render() {
         return (
           <div className="App">
+            <Socket dataChanged={this.socketDataR} />
             <AppHeader />
     
             <section className="app-main-section">
@@ -136,10 +137,11 @@ class App extends Component {
 
     this.state.chart.update(this.state.series); 
   }
-  
+  socketDataR = (data) => {
+    console.log(data);
+    
+  }
   componentDidMount() {
-    this.socket = new Socket();
-    this.socket.onStockChange(this.stockChangeServer);
     this.getStocks();
   }
 }

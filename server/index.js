@@ -55,6 +55,7 @@ if (process.env.NODE_ENV === "production") {
 //everytime someone connects, check if they have connected before, if not save the client id and socket id which will keep it open.
 let clients = [];
 let ioSocket;
+
 initSocket = server => {
   ioSocket = require("socket.io")(server);
   ioSocket.set("origins", "*:*");
@@ -66,7 +67,7 @@ initSocket = server => {
         clientInfo.socket = socket;
         clients.push(clientInfo);
       }
-    //
+    //loop through list of clients 
     socket.on("disconnect", function(data) {
       for (var i = 0, len = clients.length; i < len; ++i) {
         var c = clients[i];
@@ -76,6 +77,7 @@ initSocket = server => {
         }
       }
     });
+    socket.emit('stock-update', 'it worked');
   });
 };
 initSocket(server);
