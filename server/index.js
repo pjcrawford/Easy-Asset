@@ -1,16 +1,24 @@
 
 const express = require("express");
+// const http = require("http");
+
 const app = express();
 const router = require("./router");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const keys = require("./config/keys");
+// const logger = require('morgan');
+// const socketIO = require("socket.io")
 const mainRoutes = require('./routes/main');
 const axios = require("axios");
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const bodyParser = require("body-parser");
 require("dotenv").config();
+// const db = require('./server/models/db');
+
+// const index = require('./server/routes/index');
+// const stocks = require('./server/routes/main');
 
 
 // DB Setup
@@ -22,6 +30,8 @@ mongoose.connect(keys.MONGODB_URI, () => {
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+
 
 // set up cors to allow us to accept requests from our client
 app.use(cors())
@@ -51,10 +61,15 @@ console.log("Server listening on:", port);
 io.on('connection', function(socket) {
   console.log('New client connected with id:' + socket.id);
   
-  //using socket.id as the login token
+
 	io.on('stockChange', function(method, data) {
     this.io.emit('stock change',method, data);
-		});
+		console.log(`stock changed!`);});
+		
+  
+  io.on('stockChange', function(callback) {
+    this.io.on('stock changed', callback)
+    console.log(`stock changed!`);});
   });
   io.on('disconnect', function() {
 		console.log('Client disconnected');

@@ -3,7 +3,7 @@ const axios = require('axios').default;
 module.exports = class StockData {
   
   constructor() {
-    this.url = "https://www.alphavantage.co/query?function=TIME_groupS_DAILY";
+    this.url = "https://www.alphavantage.co/query?function=TIME_serieS_DAILY";
   
   }
 
@@ -12,11 +12,11 @@ module.exports = class StockData {
   }
 
   dataKey() {
-    return 'Time groups (Daily)';
+    return 'Time series (Daily)';
   }
 
-  parseStockData(group) {
-    const data = group[this.dataKey()];
+  parseStockData(serie) {
+    const data = serie[this.dataKey()];
     const names = Object.keys(data);
     return names.map((name) => {
       return [new Date(name).getTime(), parseFloat(data[name]['1. open'])]

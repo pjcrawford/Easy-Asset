@@ -15,7 +15,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      groups: [],
+      series: [],
       stocks: [],
       NewStockValue: '',
       chart: null,
@@ -30,7 +30,7 @@ class App extends Component {
             <section className="app-main-section">
               <div className="app-left-container">
                 <h1 className="app-section-title"> Portfolio Risk is Low! </h1>
-                <HighchartsWrapper groups={this.state.groups} id="chart-container" getChart={this.getChart}/>
+                <HighchartsWrapper series={this.state.series} id="chart-container" getChart={this.getChart}/>
               </div>
               <div className="app-right-container">
                 <h1 className="app-section-title"> Add Stock to Portfolio </h1>
@@ -63,18 +63,25 @@ class App extends Component {
   getStock = async (name) => {
     const res = await axios.get(`${root_url}/stocks/${name}`);
     if (!res.data.err) {
-      this.addgroup(res.data);
+      this.addserie(res.data);
     }
     return res.data;
   }
 
   getStocks = () => {
-    axios.get(`${root_url}/stocks`)
-      .then((res) => {
-        const stocks  = res.data || [];
+    axios.get('/stocks')
+      .then((res) => {const stocks  = res.data || [];
+        
+        const timer = setInterval(() => {
+          const seriesCount = this.state.series.length
+          if (seriesCount === stocks.length) {
+            clearInterval(timer)
+            this.hideLoader();
+          }
+        }, 2000);
 
         stocks.sort().forEach((stock) => {
-          this.getStock(stock)
+          this._getStock(stock)
         })
       })
   }
@@ -85,15 +92,15 @@ class App extends Component {
     axios.delete(`/stocks/${stockName}`)
       .then((res) => {
         if (res.data) {
-          this.removegroup(stockName);
+          this.removeserie(stockName);
           this.socket.stockChange('delete', stockName);
         }
       })
     }
   
 
-  stockChangeServer = (method, group) => {
-    return (method === 'delete') ? this.removegroup(group) : this.addgroup(group);
+  stockChangeServer = (method, serie) => {
+    return (method === 'delete') ? this.removeserie(serie) : this.addserie(serie);
   } 
   
   handleInputChange = (e) => {
@@ -104,18 +111,31 @@ class App extends Component {
     this.setState({ chart: chart });
   }
 
-  addGroup = (group) => {
-    const groups = this.state.groups.slice();
+  addserie = (serie) => {
+    const series = this.state.series.slice();
     const stocks = this.state.stocks.slice()
-    if (!stocks.includes(group.name)) {
-      stocks.push(group.name);
-      groups.push(group)
-      this.setState({ groups: groups });
+    if (!stocks.includes(serie.name)) {
+      stocks.push(serie.name);
+      series.push(serie)
+      this.setState({ series: series });
       this.setState({ stocks: stocks });
-      this.state.chart.add(group); 
+      this.state.chart.add(serie); 
     }
   }
+  removeSerie = (serieName) => {
+    const series = this.state.series.slice();
+    const stocks = this.state.stocks.slice();
+    const stockIndex = stocks.findIndex((name) => (name === serieName));
+    const serieIndex = stocks.findIndex((serie) => (serie.name === serieName));
 
+    stocks.splice(stockIndex, 1);
+    series.splice(serieIndex, 1)
+
+    this.setState({ series: series });
+    this.setState({ stocks: stocks });
+
+    this.state.chart.update(this.state.series); 
+  }
   
   componentDidMount() {
     this.socket = new Socket();

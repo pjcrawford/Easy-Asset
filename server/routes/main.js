@@ -2,18 +2,8 @@ const express = require('express');
 const router = express.Router();
 const StockData = require('./../utils/index')
 const stockData = new StockData();
-const Stocks = require('../models/stocksUse');
+const Stocks = require('../models/stocks');
 const path = require('path');
-
-
-router.get('/', (req, res, next) => {
-  const stocksResponse = [];
-
-  Stocks.model.find()
-    .then((stockList) => {
-      res.json(stockList.map((stock) => stock.name));
-    })
-});
 
 
 router.get('/:symbol_name', (req, res) => {
@@ -58,6 +48,9 @@ router.delete('/:symbol_name', (req, res) => {
       }
       res.end();
     })
+})
+router.get('/delete/all', (req, res) => {
+  Stocks.model.remove().then((deleted) => res.json(releted))
 })
 
 //to be uncommented once reducers are finalized
