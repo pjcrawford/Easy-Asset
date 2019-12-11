@@ -61,10 +61,22 @@ class App extends Component {
         })
     }
   }
+  deleteStock = (e) => {
+    const stockName = e.target.name;
+    this.showLoader();
+    axios.delete(`/stocks/${stockName}`)
+      .then((res) => {
+        this.hideLoader();
+        if (res.data) {
+          this.removeSerie(stockName);
+          this.socket.stockChange('delete', stockName);
+        }
+      })
+  }
   getStock = async (name) => {
     const res = await axios.get(`${root_url}/stocks/${name}`);
     if (!res.data.err) {
-      this.addserie(res.data);
+      this.addSerie(res.data);
     }
     return res.data;
   }
@@ -77,12 +89,11 @@ class App extends Component {
           const seriesCount = this.state.series.length
           if (seriesCount === stocks.length) {
             clearInterval(timer)
-            this.hideLoader();
           }
         }, 2000);
 
         stocks.sort().forEach((stock) => {
-          this._getStock(stock)
+          this.getStock(stock)
         })
       })
   }
@@ -93,7 +104,7 @@ class App extends Component {
     axios.delete(`/stocks/${stockName}`)
       .then((res) => {
         if (res.data) {
-          this.removeserie(stockName);
+          this.removeSerie(stockName);
           this.socket.stockChange('delete', stockName);
         }
       })
@@ -101,7 +112,7 @@ class App extends Component {
   
 
   stockChangeServer = (method, serie) => {
-    return (method === 'delete') ? this.removeserie(serie) : this.addserie(serie);
+    return (method === 'delete') ? this.removeSerie(serie) : this.addSerie(serie);
   } 
   
   handleInputChange = (e) => {
@@ -112,7 +123,7 @@ class App extends Component {
     this.setState({ chart: chart });
   }
 
-  addserie = (serie) => {
+  addSerie = (serie) => {
     const series = this.state.series.slice();
     const stocks = this.state.stocks.slice()
     if (!stocks.includes(serie.name)) {
@@ -143,6 +154,9 @@ class App extends Component {
   }
   componentDidMount() {
     this.getStocks();
+    // this.socket = new Socket();
+    // this.socket.onStockChange(this.stockChangeServer);
+  
   }
 }
 
