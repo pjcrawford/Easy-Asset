@@ -3,7 +3,7 @@ const axios = require('axios').default;
 module.exports = class StockData {
   
   constructor() {
-    this.url = "https://www.alphavantage.co/query?function=TIME_serieS_DAILY";
+    this.url = "https://www.alphavantage.co/query?function=TIME_series_DAILY";
   
   }
 

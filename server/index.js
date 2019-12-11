@@ -12,7 +12,7 @@ const keys = require("./config/keys");
 const mainRoutes = require('./routes/main');
 const axios = require("axios");
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
+// const io = require('socket.io')(server);
 const bodyParser = require("body-parser");
 require("dotenv").config();
 // const db = require('./server/models/db');
@@ -51,6 +51,34 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+//array called clients
+//everytime someone connects, check if they have connected before, if not save the client id and socket id which will keep it open.
+let clients = [];
+let ioSocket;
+initSocket = server => {
+  ioSocket = require("socket.io")(server);
+  ioSocket.set("origins", "*:*");
+  ioSocket.on("connection", function(socket) {
+      var clientInfo = clients.find(client => client.clientId === socket.id);
+      if (!clientInfo) {
+        var clientInfo = new Object();
+        clientInfo.clientId = socket.id;
+        clientInfo.socket = socket;
+        clients.push(clientInfo);
+      }
+    //
+    socket.on("disconnect", function(data) {
+      for (var i = 0, len = clients.length; i < len; ++i) {
+        var c = clients[i];
+        if (c.clientId == socket.id) {
+          clients.splice(i, 1);
+          break;
+        }
+      }
+    });
+  });
+};
+initSocket(server);
 // Server Setup
 const port = process.env.PORT || 5000;
 // const server = http.createServer(app);
@@ -58,22 +86,20 @@ server.listen(port);
 
 console.log("Server listening on:", port);
 
-io.on('connection', function(socket) {
-  console.log('New client connected with id:' + socket.id);
+// io.on('connection', function(socket) {
+//   console.log('New client connected with id:' + socket.id);
   
 
-	io.on('stockChange', function(method, data) {
-    this.io.emit('stock change',method, data);
-		console.log(`stock changed!`);});
-		
-  
-  io.on('stockChange', function(callback) {
-    this.io.on('stock changed', callback)
-    console.log(`stock changed!`);});
-  });
-  io.on('disconnect', function() {
-		console.log('Client disconnected');
-	});
+// io.on('stockChange', function(method, data) {
+//     this.io.emit('stock change',method, data);
+// 		console.log(`stock changed!`);});;
+//   });
+//   io.on('disconnect', function() {
+// 		console.log('Client disconnected');
+//   });
+
+
+
 
 
 module.exports = server;
