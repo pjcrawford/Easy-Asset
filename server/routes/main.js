@@ -1,44 +1,84 @@
-const router = require("express").Router();
-const Stock = require("../models/stock");
-const API_KEY = 'QJ3VIT49U76EATUU';
-const ROOT_URL = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY";
-const axios = require('axios').default;
-const StockData = require('./../utils/index');
+const express = require('express');
+const router = express.Router();
+const StockData = require('./../utils/index')
+const stockData = new StockData();
+const Stocks = require('../models/stocksUse');
+const path = require('path');
 
-// router.get('/', (req, res, next) => {
-  
-//     Stocks.model.find()
-//       .then((stockList) => {
-//         res.json(stockList.map((stock) => stock.name));
-//       })
-//   });
 
-router.get('/:stock_symbol', (req, res) => {
-    const stockSymbol = req.params.stock_symbol;
-    const newStockData = new StockData;
-    if (!stockSymbol) {
-        throw new Error("Ticker not found");
-    }
-    newStockData.getStockData(stockSymbol)
-      .then((response) => {
-        if (response.data) {
-          Stock.add(stockSymbol)
-            .then((stock) => {
-              res.json({
-                name: stockSymbol,
-                data: newStockData.parseStockData(response.data)
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-              res.json({err: 'error'});
-            })
-        } else {
-          res.json({ empty: ''})
-        }
-      }).catch((err) => {
-        res.status(500).json({error: err.error})
-      })
+router.get('/', (req, res, next) => {
+  const stocksResponse = [];
+
+  Stocks.model.find()
+    .then((stockList) => {
+      res.json(stockList.map((stock) => stock.name));
+    })
+});
+
+
+router.get('/:symbol_name', (req, res) => {
+  const symbolName = req.params.symbol_name;
+  stockData.getStockData(symbolName)
+    .then((response) => {
+      if (response.data) {
+        Stocks.findOrCreate(symbolName)
+          .then((stock) => {
+            res.json({
+              name: symbolName,
+              data: stockData.parseStockData(response.data)
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.json({err: 'error'});
+          })
+      } else {
+        res.json({ empty: ''})
+      }
+    }).catch((err) => {
+      res.status(500).json({error: err.error})
+    })
+})
+
+router.get('/add/:symbol', (req, res) => {
+  const newStock = new Stocks.model({ name: req.params.symbol})
+  newStock.save().then((saved) => {
+    res.json(saved);
   })
-  
+  .catch((err) => {
+    res.end();
+  })
+})
+
+router.delete('/:symbol_name', (req, res) => {
+  Stocks.model.remove({ name: req.params.symbol_name })
+    .then((data) => {
+      if (data) {
+        res.end('deleted');
+      }
+      res.end();
+    })
+})
+
+//to be uncommented once reducers are finalized
+
+// router.get("/current_user", UserAuthCheck, (req, res) => {
+//   res.send(req.user);
+// });
+
+
+// when login is successful, retrieve user info
+// router.get("/login/success", UserAuthCheck, (req, res) => {
+//   console.log("login/success accessed");
+//   console.log(req.user);
+//   if (req.user) {
+//     res.json({
+//       success: true,
+//       message: "user has successfully authenticated",
+//       user: req.user,
+//     });
+//   }
+// });
 module.exports = router;
+
+

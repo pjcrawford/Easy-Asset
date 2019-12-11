@@ -1,15 +1,17 @@
-require("dotenv").config();
+
 const express = require("express");
-const http = require("http");
-const bodyParser = require("body-parser");
 const app = express();
 const router = require("./router");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const passport = require("passport");
 const keys = require("./config/keys");
-const cookieSession = require("cookie-session");
-const cookieParser = require("cookie-parser");
+const mainRoutes = require('./routes/main');
+const axios = require("axios");
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const bodyParser = require("body-parser");
+require("dotenv").config();
+
 
 // DB Setup
 mongoose.connect(keys.MONGODB_URI, () => {
@@ -17,24 +19,13 @@ mongoose.connect(keys.MONGODB_URI, () => {
 });
 
 
-// parse cookies
-app.use(cookieParser());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 // set up cors to allow us to accept requests from our client
-app.use(
-  cors({
-    origin: "http://localhost:3000", // allow to server to accept request from different origin
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true // allow session cookie from browser to pass through
-  })
-);
-
+app.use(cors())
+app.use('/stocks', mainRoutes);
 router(app);
 
 if (process.env.NODE_ENV === "production") {
@@ -52,6 +43,22 @@ if (process.env.NODE_ENV === "production") {
 
 // Server Setup
 const port = process.env.PORT || 5000;
-const server = http.createServer(app);
+// const server = http.createServer(app);
 server.listen(port);
+
 console.log("Server listening on:", port);
+
+io.on('connection', function(socket) {
+  console.log('New client connected with id:' + socket.id);
+  
+  //using socket.id as the login token
+	io.on('stockChange', function(method, data) {
+    this.io.emit('stock change',method, data);
+		});
+  });
+  io.on('disconnect', function() {
+		console.log('Client disconnected');
+	});
+
+
+module.exports = server;

@@ -1,8 +1,10 @@
-import React, { Component } from 'react';
-import Chart from './Chart';
-import './../assets/css/App.css';
 
+
+import React, { Component } from 'react';
+import StockChart from './StockChart';
+import './../App.css';
 export default class HighchartsWrapper extends Component {
+
   componentDidMount(){
     this.chart();
   }
@@ -15,7 +17,7 @@ export default class HighchartsWrapper extends Component {
   }
 
   chart() {
-    const chart = new Chart(this.props.id, this.props.series, {});
+    const chart = new StockChart(this.props.id, this.props.series, {});
     this.props.getChart(chart)
   }
 }

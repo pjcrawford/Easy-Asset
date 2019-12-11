@@ -1,7 +1,6 @@
-  
 import Highcharts from 'highcharts/highstock';
 
-export default class Chart {
+export default class StockChart {
   constructor(divClass, series, config) {
     
     this.divClass = divClass;
@@ -58,5 +57,9 @@ export default class Chart {
     this.series = series;
     this.chart.destroy();
     this.create();
+   
   }
+
+
+
 }

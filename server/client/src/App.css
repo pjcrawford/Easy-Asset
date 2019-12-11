@@ -1,9 +1,24 @@
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-color: #1d7e0c;
+  --dark-color: #1d7e0c;
+  --text-title-color: white;
+  --text-body-color: #444;
+  --text-body-contrast: var(--primary-color)
+}
+
 .App {
   text-align: center;
   width: 100%;
-  color: #444
+  color: #444;
 }
-
 
 .header {
   background: #1d7e0c;
@@ -24,3 +39,253 @@
   color: #61dafb;
 }
 
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+.app-main-section{ 
+  width: 100%;
+  display: flex;
+  /* padding: 0 50px; */
+  margin-top: 5px;
+}
+
+.app-section-title {
+  color: var(--dark-color);
+  text-align: left;
+  margin-bottom: 10px;
+  font-size: medium;
+}
+@media (max-width: 768px) {
+  
+  .app-main-section{ 
+    width: 100%;
+    flex-direction: column;
+    padding: 0 5px
+  }
+  
+  .app-left-container {
+    width: 100%;
+  }
+  
+  .app-right-container {
+    width: 100%;
+  }
+
+  .app-section-title {
+    text-align: center;
+  }
+
+  
+.phone-title {
+  font-size: .8em;
+  width: 100%;
+  padding-top: 10px;
+  text-align: left;
+}
+
+}
+/* .chart-container {
+  padding: 20%;
+  width: 66%;
+} */
+.stock-list-view {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0 20px;
+  margin-top: 20px;
+}
+
+.stock-item {
+  padding: 5px 5%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, .4);
+  cursor: pointer; 
+  position: relative;
+  width: 100%;
+  margin: 10px 0
+}
+
+
+.stock-title {
+  color: var(--primary-color);
+  margin: 10px;
+}
+
+.stock-btn-delete {
+  background: #333;
+  border: 0;
+  border-radius: 50%;
+  color: white;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  right: -10px;
+  top: 2px;
+  transition: all ease .3s;
+  cursor: pointer;
+  visibility: hidden;
+
+}
+
+.stock-item:hover .stock-btn-delete {
+  visibility: visible;
+}
+
+.stock-btn-delete:hover {
+  background: rgb(48, 208, 48);
+  color: white;
+  transform: scale(1.01);
+}
+
+.btn-add-stock {
+  background: rgb(48, 208, 48);
+  color: white;
+  font-size: 90px;
+}
+
+.btn-add-stock:hover {
+  background: rgb(9, 160, 9);
+}
+
+@media (max-width: 768px) {
+  .stock-list-view {
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  .stock-btn-delete {
+    visibility: visible;
+  }
+
+  .stock-item {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+.stock-list-view {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 0 20px;
+  margin-top: 20px;
+}
+
+.stock-item {
+  padding: 5px 5%;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 2px 3px 5px rgba(0, 0, 0, .4);
+  cursor: pointer; 
+  position: relative;
+  width: 100%;
+  margin: 10px 0
+}
+
+
+.stock-title {
+  color: var(--primary-color);
+  margin: 10px;
+}
+
+.stock-btn-delete {
+  background: #333;
+  border: 0;
+  border-radius: 50%;
+  color: white;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  right: -10px;
+  top: 2px;
+  transition: all ease .3s;
+  cursor: pointer;
+  visibility: hidden;
+
+}
+.stock-btn-delete {
+  background: #333;
+  border: 0;
+  border-radius: 50%;
+  color: white;
+  height: 25px;
+  width: 25px;
+  position: absolute;
+  right: -10px;
+  top: 2px;
+  transition: all ease .3s;
+  cursor: pointer;
+  visibility: hidden;
+
+}
+.stock-item:hover .stock-btn-delete {
+  visibility: visible;
+}
+
+.stock-btn-delete:hover {
+  background: rgb(48, 208, 48);
+  color: white;
+  transform: scale(1.01);
+}
+
+.btn-add-stock {
+  background: rgb(48, 208, 48);
+  color: white;
+  font-size: 90px;
+}
+
+.btn-add-stock:hover {
+  background: rgb(9, 160, 9);
+}
+
+@media (max-width: 768px) {
+  .stock-list-view {
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+  .stock-btn-delete {
+    visibility: visible;
+  }
+
+  .stock-item {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+.stock-add-form {
+  width: 100%;
+  padding: 0 20px;
+  margin-top: 10px;
+  height: 35px;
+  display: flex;
+}
+
+input {
+  height: 100%;
+}
+
+.input-add {
+  width: 70%;
+  padding: 0 5px;
+}
+
+.btn-add {
+  width: 30%;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all ease-in .3s;
+  background: var(--primary-color);
+}
+
+.btn-add:hover {
+  width: 40%;
+  background: white;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
