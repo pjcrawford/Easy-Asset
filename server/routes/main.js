@@ -49,29 +49,8 @@ router.delete('/:symbol_name', (req, res) => {
       res.end();
     })
 })
-router.get('/delete/all', (req, res) => {
-  Stocks.model.remove().then((deleted) => res.json(releted))
-})
-
-//to be uncommented once reducers are finalized
-
-// router.get("/current_user", UserAuthCheck, (req, res) => {
-//   res.send(req.user);
-// });
 
 
-// when login is successful, retrieve user info
-// router.get("/login/success", UserAuthCheck, (req, res) => {
-//   console.log("login/success accessed");
-//   console.log(req.user);
-//   if (req.user) {
-//     res.json({
-//       success: true,
-//       message: "user has successfully authenticated",
-//       user: req.user,
-//     });
-//   }
-// });
 module.exports = router;
 
 
