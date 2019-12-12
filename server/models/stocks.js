@@ -22,6 +22,7 @@ class Stocks {
   delete(stockName) {
     return this.model.findOneAndDelete({ name: stockName })
   }
+  
 }
 
 module.exports = new Stocks();

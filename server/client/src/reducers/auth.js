@@ -1,17 +1,13 @@
-import { AUTH_USER, AUTH_ERROR } from '../actions/types';
+import { DEFAULT_STATE } from '../actions'
 
-const INITIAL_STATE = {
-  authenticated: localStorage.getItem('socket id') || '',
-  errorMessage: ''
-};
+const DEFAULT_STATE = {
+  username: localStorage.getItem('clientID') || '',
+}
 
-export default function(state = INITIAL_STATE, action) {
+export default function(state = DEFAULT_STATE, action) {
   switch (action.type) {
-    case AUTH_USER:
-      return { ...state, authenticated: action.payload.socketID,
-        };
-    case AUTH_ERROR:
-      return { ...state, errorMessage: action.payload };
+    case DEFAULT_STATE:
+      return action.payload;
     default:
       return state;
   }

@@ -2,8 +2,20 @@ const express = require('express');
 const router = express.Router();
 const StockData = require('./../utils/index')
 const stockData = new StockData();
-const Stocks = require('../models/stocks');
-const path = require('path');
+const Stocks = require('./../models/stocks');
+
+// const path = require('path');
+// const requireSignin = passport.authenticate('login', { session: false });
+
+
+router.get('/', (req, res, next) => {
+  const stocksResponse = [];
+
+  Stocks.model.find()
+    .then((stockList) => {
+      res.json(stockList.map((stock) => stock.name));
+    })
+});
 
 
 router.get('/:symbol_name', (req, res) => {

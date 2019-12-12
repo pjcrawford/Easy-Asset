@@ -10,6 +10,19 @@ import './App.css';
 const root_url = "http://localhost:5000"
 const cors = require("cors");
 
+// const useStateWithLocalStorage = localStorageKey => {
+//   const [value, setValue] = React.useState(
+//     localStorage.getItem(localStorageKey) || ''
+//   );
+
+//   React.useEffect(() => {
+//     localStorage.setItem(localStorageKey, value);
+//   }, [value]);
+
+//   return [value, setValue];
+// };
+
+
 class App extends Component {
   
   constructor(props){
@@ -19,8 +32,14 @@ class App extends Component {
       stocks: [],
       NewStockValue: '',
       chart: null,
+      // client: uuidv4(),
      
     };
+  //   const [value, setValue] = useStateWithLocalStorage(
+  //     'myValueInLocalStorage'
+  //   );
+  //   const onChange = event => setValue(event.target.value);
+  
   }
   render() {
         return (
@@ -43,7 +62,17 @@ class App extends Component {
         );
       }
  
-//to be moved to reducers
+    //  search = async (term) => {
+    //   const res = await axios.get(
+    //       `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${term}&apikey=${this.apikey}`); {
+    //         if (!res.data.err) {
+    //         console.log('search not');
+    //       }
+    //       return res.data;
+    //       }
+       
+    //   }
+    
   addStock = (e) => {
     e.preventDefault();
     if (this.state.NewStockValue && !this.state.stocks.includes(this.state.NewStockValue)) {
@@ -55,18 +84,18 @@ class App extends Component {
             alert('Stock not found');
           }
           this.setState({ NewStockValue: '' });
+          // localStorage.setItem(STORAGE_ID, NewStockValue);
         })
         .catch((err) => {
           console.log(err);
         })
-    }
+    } alert('stock already in portfolio!');
   }
+
   deleteStock = (e) => {
     const stockName = e.target.name;
-    this.showLoader();
     axios.delete(`/stocks/${stockName}`)
       .then((res) => {
-        this.hideLoader();
         if (res.data) {
           this.removeSerie(stockName);
           this.socket.stockChange('delete', stockName);
@@ -98,17 +127,7 @@ class App extends Component {
       })
   }
     
- 
-  deleteStock = (e) => {
-    const stockName = e.target.name;
-    axios.delete(`/stocks/${stockName}`)
-      .then((res) => {
-        if (res.data) {
-          this.removeSerie(stockName);
-          this.socket.stockChange('delete', stockName);
-        }
-      })
-    }
+
   
 
   stockChangeServer = (method, serie) => {
@@ -152,11 +171,20 @@ class App extends Component {
     console.log(data);
     
   }
+  searchBar = async (name) => {
+    const res = await axios.get(`${root_url}/stocks/${name}`);
+    if (!res.data.err) {
+      this.addSerie(res.data);
+    }
+    return res.data;
+  }
   componentDidMount() {
+    // if(this.state.sessionID !== sessionID) {
+    //   return this.removeSerie
+    // }
+
     this.getStocks();
-    // this.socket = new Socket();
-    // this.socket.onStockChange(this.stockChangeServer);
-  
+    
   }
 }
 

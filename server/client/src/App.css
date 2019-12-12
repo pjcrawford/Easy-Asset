@@ -289,3 +289,65 @@ input {
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
 }
+* {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
+.landing-page {
+  width: 100%;
+  height: 100vh;
+  background-image: url('http://static.politico.com/0a/f9/9e80ca5348bb9fdd303d3d7fd9a9/151102-wall-street-3-gty-1160.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 50vh;
+  text-align: center;
+}
+
+.search-input h4 {
+  color: white;
+  font-size: 50px;
+}
+
+.search-input input {
+  outline: none;
+  text-align: center;
+  height: 40px;
+  width: 200px;
+}
+
+.search-input button {
+  color: black;
+  height: 40px;
+  width: 100px;
+  outline: none;
+}
+
+.search-input button:hover {
+  background-color: gray;
+  color: white;
+  transition: 1s;
+  border: none;
+}
+
+.search-input button:active {
+  box-shadow: 0 2px gray;
+  transform: translateY(4px);
+}
+
+.loading-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #FCFCFC;
+  flex-direction: column;
+}
