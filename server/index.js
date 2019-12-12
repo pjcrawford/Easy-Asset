@@ -23,7 +23,6 @@ require("dotenv").config();
 // const LocalStrategy = require('passport-local').Strategy;
 
 
-
 // DB Setup
 mongoose.connect(keys.MONGODB_URI, () => {
   console.log("connected to mongo db");
@@ -59,45 +58,7 @@ if (process.env.NODE_ENV === "production") {
 
 //array called clients
 //everytime someone connects, check if they have connected before, if not save the client id and socket id which will keep it open.
-let clients = [];
-let ioSocket;
 
-initSocket = server => {
-  ioSocket = require("socket.io")(server);
-  ioSocket.set("origins", "*:*");
-  ioSocket.on("connection", function(socket) {
-    console.log("client connected to:", socket.id);
-    socket.on("storeClientInfo", function(data) {
-      var clientInfo = clients.find(client => client.clientId === socket.id);
-      if (!clientInfo) {
-        var clientInfo = new Object();
-        clientInfo.customId = data.customId;
-        clientInfo.clientId = socket.id;
-        clientInfo.socket = socket;
-        clients.push(clientInfo);
-      } else {
-        clientInfo.userID = data.userID;
-      }
-      console.log("client info from ", socket.id, ": ", data.customId);
-      socket.on("setState", function(data) {
-          setState(data);
-        });
-      
-    });
-    //loop through list of clients 
-    socket.on("disconnect", function(data) {
-      for (var i = 0, len = clients.length; i < len; ++i) {
-        var c = clients[i];
-        if (c.clientId == socket.id) {
-          clients.splice(i, 1);
-          break;
-        }
-      }
-    });
-    socket.emit('stock-update', 'it worked');
-  });
-};
-initSocket(server);
 // Server Setup
 const port = process.env.PORT || 5000;
 // const server = http.createServer(app);
@@ -105,39 +66,6 @@ server.listen(port);
 
 console.log("Server listening on:", port);
 
-// io.on('connection', function(socket) {
-//   console.log('New client connected with id:' + socket.id);
-  
-
-// io.on('stockChange', function(method, data) {
-//     this.io.emit('stock change',method, data);
-// 		console.log(`stock changed!`);});;
-//   });
-//   io.on('disconnect', function() {
-// 		console.log('Client disconnected');
-//   });
-
-// passport.use('login', new LocalStrategy ((username, password, done) => {
-//   const authenticated = username === "John" && password === "Smith";
-
-//   if (authenticated) {
-//     return done(null, { myUser:'user', myID: 1234 });
-//   } else {
-//     return done(null, false);
-//   }
-// }));
-// app.post('/login', passport.authenticate('login', {
-//   successRedirect: '/success',
-//   failureRedirect: '/login'
-// }));
-
-// app.get('/success', (req, res) => {
-//   res.send("Hey, hello from the server!");
-// })
-
-// router.get('/', function(req, res, next) {
-//     res.sendFile(path.resolve(__dirname, '..', 'build','index.html'));
-//   });
 
 
 

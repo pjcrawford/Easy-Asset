@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
   name: String,
+  tickers: [String]
 });
 
 module.exports = mongoose.model("user", UserSchema);

@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
-//old model used to test, will be replaced with json model
+
 class Stocks {
   constructor() {
     this.model = mongoose.model('stock', new mongoose.Schema({
       name: String,
+      company: String,
+      EPS: Number,
+      EBITDA: Number,
+      PE: Number,
+      ROA: Number,
+      ROE: Number,
+      OverallRisk: String,
       
     }));
   }
@@ -17,7 +24,16 @@ class Stocks {
   }
 
   create(stockName) {
-    return this.model.create({ name: stockName })
+    return this.model.create(
+      { name: stockName },
+      { company: stockName },
+      { EPS: stockName },
+      { EBITDA: stockName },
+      { PE: stockName },
+      { ROA: stockName },
+      { ROE: stockName },
+      { OverallRisk: stockName },
+      { imageUrl: stockName })
   }
 
   delete(stockName) {

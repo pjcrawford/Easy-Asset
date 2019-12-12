@@ -5,22 +5,10 @@ import AppHeader from './components/AppHeader';
 import HighchartsWrapper from './components/HighchartsWrapper';
 import StockListView from './components/StockListView';
 import StockAddForm from './components/StockAddForm';
-import Socket from './components/Socket';
+
 import './App.css';
-const root_url = "http://localhost:5000"
+const root_url = "localhost:5000/api"
 const cors = require("cors");
-
-// const useStateWithLocalStorage = localStorageKey => {
-//   const [value, setValue] = React.useState(
-//     localStorage.getItem(localStorageKey) || ''
-//   );
-
-//   React.useEffect(() => {
-//     localStorage.setItem(localStorageKey, value);
-//   }, [value]);
-
-//   return [value, setValue];
-// };
 
 
 class App extends Component {
@@ -28,23 +16,23 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
+      user: [],
       series: [],
       stocks: [],
       NewStockValue: '',
       chart: null,
       // client: uuidv4(),
-     
+
     };
   //   const [value, setValue] = useStateWithLocalStorage(
   //     'myValueInLocalStorage'
   //   );
   //   const onChange = event => setValue(event.target.value);
-  
   }
   render() {
         return (
           <div className="App">
-            <Socket dataChanged={this.socketDataR} />
+
             <AppHeader />
     
             <section className="app-main-section">
@@ -62,24 +50,33 @@ class App extends Component {
         );
       }
  
-    //  search = async (term) => {
-    //   const res = await axios.get(
-    //       `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${term}&apikey=${this.apikey}`); {
-    //         if (!res.data.err) {
-    //         console.log('search not');
-    //       }
-    //       return res.data;
-    //       }
-       
-    //   }
-    
+
+      // router.get('/add/:symbol', (req, res) => {
+      //   const newStock = new Stocks.model({ name: req.params.symbol})
+      //   newStock.save().then((saved) => {
+      //     res.json(saved);
+      //   })
+      //   .catch((err) => {
+      //     res.end();
+      //   })
+      // })
+      
+      // router.delete('/:symbol_name', (req, res) => {
+      //   Stocks.model.remove({ name: req.params.symbol_name })
+      //     .then((data) => {
+      //       if (data) {
+      //         res.end('deleted');
+      //       }
+      //       res.end();
+      //     })
+      // })
   addStock = (e) => {
     e.preventDefault();
     if (this.state.NewStockValue && !this.state.stocks.includes(this.state.NewStockValue)) {
       this.getStock(this.state.NewStockValue)
         .then((data) => {
           if (!data.err) {
-            this.socket.stockChange('add', data);
+
           } else {
             alert('Stock not found');
           }
@@ -98,7 +95,6 @@ class App extends Component {
       .then((res) => {
         if (res.data) {
           this.removeSerie(stockName);
-          this.socket.stockChange('delete', stockName);
         }
       })
   }
@@ -177,8 +173,6 @@ class App extends Component {
   //   return res.data;
   // }
   componentDidMount() {
-    this.socket = new Socket();
-    this.socket.onStockChange(this.stockChangeServer);
 
     this.getStocks();
     

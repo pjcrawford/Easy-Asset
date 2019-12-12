@@ -1,46 +1,39 @@
 const express = require('express');
 const router = express.Router();
-const StockData = require('./../utils/index')
+const StockData = require('../utils/index')
 const stockData = new StockData();
-const Stocks = require('./../models/stocks');
-
+const Stocks = require('../models/stocks');
+const fs = require('fs');
+const finalHandler = require('finalhandler');
+const queryString = require('querystring');
+const Router = require('router');
+const bodyParser = require('body-parser');
 // const path = require('path');
 // const requireSignin = passport.authenticate('login', { session: false });
 
 
-router.get('/', (req, res, next) => {
-  const stocksResponse = [];
+const stockList = require("../stockschema/stock_data.json");
 
-  Stocks.model.find()
-    .then((stockList) => {
-      res.json(stockList.map((stock) => stock.name));
-    })
+router.get('/stocks', (req, res) => {
+  res.writeHead(200, Object.assign({ 'Content-Type': 'application/json' }))
+  res.end(JSON.stringify(stockList))
 });
 
 
-router.get('/:symbol_name', (req, res) => {
+router.get('/stocks/:symbol_name', (req, res, next) => {
   const symbolName = req.params.symbol_name;
-  stockData.getStockData(symbolName)
-    .then((response) => {
-      if (response.data) {
-        Stocks.findOrCreate(symbolName)
-          .then((stock) => {
-            res.json({
-              name: symbolName,
-              data: stockData.parseStockData(response.data)
-            });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.json({err: 'error'});
-          })
-      } else {
-        res.json({ empty: ''})
+  if (!symbolName) {
+    alert('stock not found')
+    res.end();
+  } else {
+    let stockCheck = stockList.find(s => s.ticker === symbolName)
+    res.send(stockCheck)
+
+    
       }
-    }).catch((err) => {
-      res.status(500).json({error: err.error})
-    })
-})
+    }
+)
+
 
 router.get('/add/:symbol', (req, res) => {
   const newStock = new Stocks.model({ name: req.params.symbol})

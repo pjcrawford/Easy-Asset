@@ -169,12 +169,12 @@
     margin: 5px 0;
   }
 }
-/* .stock-list-view { */
-  /* flex-wrap: wrap;
+.stock-list-view {
+  flex-wrap: wrap;
   justify-content: flex-start;
   padding: 0 20px;
-  margin-top: 20px; */
-/* } */
+  margin-top: 20px;
+}
 
 .stock-item {
   padding: 5px 5%;
