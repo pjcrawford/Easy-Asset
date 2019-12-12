@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 class Stocks {
   constructor() {
     this.model = mongoose.model('stock', new mongoose.Schema({
-      name: String
+      name: String,
+      
     }));
   }
 

@@ -74,14 +74,13 @@ initSocket = server => {
         clientInfo.customId = data.customId;
         clientInfo.clientId = socket.id;
         clientInfo.socket = socket;
-        clientInfo.userID = data.userID;
         clients.push(clientInfo);
       } else {
         clientInfo.userID = data.userID;
       }
       console.log("client info from ", socket.id, ": ", data.customId);
       socket.on("setState", function(data) {
-          ResetState(data);
+          setState(data);
         });
       
     });

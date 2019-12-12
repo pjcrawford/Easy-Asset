@@ -89,7 +89,7 @@ class App extends Component {
         .catch((err) => {
           console.log(err);
         })
-    } alert('stock already in portfolio!');
+    } 
   }
 
   deleteStock = (e) => {
@@ -127,8 +127,6 @@ class App extends Component {
       })
   }
     
-
-  
 
   stockChangeServer = (method, serie) => {
     return (method === 'delete') ? this.removeSerie(serie) : this.addSerie(serie);
@@ -171,17 +169,16 @@ class App extends Component {
     console.log(data);
     
   }
-  searchBar = async (name) => {
-    const res = await axios.get(`${root_url}/stocks/${name}`);
-    if (!res.data.err) {
-      this.addSerie(res.data);
-    }
-    return res.data;
-  }
+  // searchBar = async (name) => {
+  //   const res = await axios.get(`${root_url}/stocks/${name}`);
+  //   if (!res.data.err) {
+  //     this.addSerie(res.data);
+  //   }
+  //   return res.data;
+  // }
   componentDidMount() {
-    // if(this.state.sessionID !== sessionID) {
-    //   return this.removeSerie
-    // }
+    this.socket = new Socket();
+    this.socket.onStockChange(this.stockChangeServer);
 
     this.getStocks();
     

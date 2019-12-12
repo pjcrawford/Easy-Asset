@@ -1,9 +1,8 @@
-exports.currentUser = function(req, res) {
-    const user = {
-      email: req.user.email,
-      token: tokenForUser(req.user),
-      watchList: req.user.watchList
-    }
-  
-    res.send(user)
-  }
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+const UserSchema = new Schema({
+  name: String,
+});
+
+module.exports = mongoose.model("user", UserSchema);
