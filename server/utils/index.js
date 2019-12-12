@@ -24,23 +24,23 @@ module.exports = class StockData {
     })
   }
   
-  async search(term) {
-    return await fetch(
-      `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${term}&apikey=${
-        process.env.ALPHA_API_KEY
-      }`
-    ).then(response => {
-      try {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(response.status);
-        }
-      } catch (e) {
-        console.log(`Caught error: ${e}`);
-      }
-    });
-  }
+  // async search(term) {
+  //   return await fetch(
+  //     `https://www.alphavantage.co/query?function=SYMBOL_SEARCH&keywords=${term}&apikey=${
+  //       process.env.ALPHA_API_KEY
+  //     }`
+  //   ).then(response => {
+  //     try {
+  //       if (response.ok) {
+  //         return response.json();
+  //       } else {
+  //         throw new Error(response.status);
+  //       }
+  //     } catch (e) {
+  //       console.log(`Caught error: ${e}`);
+  //     }
+  //   });
+  // }
 
 
 }
