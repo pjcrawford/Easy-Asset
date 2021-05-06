@@ -29,7 +29,7 @@
     "express-busboy": "^7.0.1",
     "faker": "^4.1.0",
     "fs": "0.0.1-security",
-    "highcharts": "^7.2.1",
+    "highcharts": "^9.0.0",
     "json-find": "^2.0.7",
     "mongoose": "^5.7.12",
     "morgan": "^1.9.1",
